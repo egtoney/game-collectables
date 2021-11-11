@@ -1,0 +1,70 @@
+<div>
+    <div class="w-100 d-flex" style="justify-content: space-between;">
+        <div class="d-flex" style="align-self: flex-start; align-items: center;">
+            <span style="white-space: nowrap; margin-right: 1em;">Page Size</span> 
+            <select class="form-select" (change)="changePageSize($event)">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div class="d-flex" style="align-self: flex-end; align-items: center;">
+            <span style="white-space: nowrap; margin-right: 1em;">Search</span>
+            <input type="text" class="form-control" placeholder="filter" (input)="changeFilter($event)"/>
+        </div>
+    </div>
+    <table #dtable class="table table-striped w-100">
+        <thead>
+            <tr class="fw-bolder fs-6 text-gray-800">
+                <th *ngFor="let column of dtOptions.columns" (click)="sortBy(column.data)">
+                    {{column.title}}
+                    <i class="bi bi-sort-down fs-1" style="vertical-align: middle;" *ngIf="column.data == selectedSortAscCol"></i>
+                    <i class="bi bi-sort-up fs-1" style="vertical-align: middle;" *ngIf="column.data == selectedSortDesCol"></i>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of dispRows; trackBy: trackRow">
+                <ng-container *ngFor="let column of dtOptions.columns">
+                    <td class="col{{column.data}}" [innerHTML]="getRowValue(row, column) | safeHtml" *ngIf="column.render">
+                    </td>
+                    <td class="col{{column.data}}" [class.text-end]="column.data == 'TotalCheckorEFTAmt'" *ngIf="!column.render">
+                        {{getRowValue(row, column)}}
+                    </td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+    <div class="w-100 d-flex" style="justify-content: space-between;">
+        <div style="align-self: flex-start;">
+            Showing {{startIndex + 1}} to {{endIndex}} of {{totalRows}} entries
+        </div>
+        <div style="align-self: flex-end;">
+            <ul class="pagination">
+                <li class="page-item previous" [class.disabled]="currPage === 0">
+                    <a href="#" class="page-link" (click)="clickPage($event, 0)">
+                        <i class="previous" style="margin-right: -.5em;"></i>
+                        <i class="previous"></i>
+                    </a>
+                </li>
+    
+                <li class="page-item previous" [class.disabled]="currPage === 0"><a href="#" class="page-link" (click)="clickPage($event, currPage - 1)"><i class="previous"></i></a></li>
+    
+                <ng-container *ngFor="let page of dispPages">
+                    <li class="page-item" [class.active]="currPage === page" *ngIf="page !== '...'"><a class="page-link" (click)="clickPage($event, page)">{{page}}</a></li>
+                    <li class="page-item" *ngIf="page === '...'">{{page}}</li>
+                </ng-container>
+    
+                <li class="page-item next" [class.disabled]="currPage === totalPages"><a href="#"  class="page-link" (click)="clickPage($event, currPage + 1)"><i class="next"></i></a></li>
+    
+                <li class="page-item previous" [class.disabled]="currPage === totalPages">
+                    <a href="#" class="page-link" (click)="clickPage($event, totalPages)">
+                        <i class="next" style="margin-right: -.5em;"></i>
+                        <i class="next"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{{afterRender()}}

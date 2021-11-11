@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "item_categories",
+  "info": {
+    "name": "ItemCategory",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "items": {
+      "via": "item_category",
+      "collection": "item"
+    },
+    "description": {
+      "type": "richtext"
+    }
+  }
+}
