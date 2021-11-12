@@ -10,11 +10,7 @@ const Routing: Routes = [
     path: '',
     redirectTo: '/home',
     pathMatch: 'full',
-  },
-  {
-    path: '**',
-    redirectTo: 'error/404',
-  },
+  }
 ];
 
 export { Routing };
